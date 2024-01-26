@@ -4,23 +4,25 @@ import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage'
 import AlbumPage from './pages/AlbumPage';
 import NavbarComponent from './components/NavbarComponent';
-import FooterComponent from './components/FooterComponent';
+import SearchComponent from './components/SearchComponent';
+import YourLibrary from './pages/YourLibrary';
+import CustomFooterComponent from './components/CustomFooterComponent';
 
 
 function App() {
   return (
     <>
-
       <BrowserRouter>
         <NavbarComponent />
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/album/:id' element={<AlbumPage />} />
-          <Route path='*' element={<NotFoundPage />} />
+          <Route path='/search/' element={<SearchComponent />} />
+          <Route path='/yourlibrary/' element={<YourLibrary />} />
+          <Route path='/notfound' element={<NotFoundPage />} />
         </Routes>
-        <FooterComponent />
+        <CustomFooterComponent />
       </BrowserRouter>
-
     </>
   );
 }

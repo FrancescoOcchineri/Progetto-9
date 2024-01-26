@@ -1,9 +1,27 @@
-import React from 'react'
-import { button, Container, InputGroup, Row, Col, FormControl, NavbarBrand, NavbarCollapse, Button, ProgressBar } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Container, InputGroup, Row, Col, NavbarCollapse, Button, Form } from 'react-bootstrap'
+import { Link, useNavigate } from 'react-router-dom'
 import image from '../img/Spotify_Logo.png';
+import { getSearch } from '../action/search';
+import { useDispatch } from 'react-redux';
 
 export default function NavbarComponent() {
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleSearch = async () => {
+        try {
+            await dispatch(getSearch(searchQuery));
+            navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+        } catch (error) {
+            console.error('Error in handleSearch:', error);
+            navigate('/search/');
+        }
+    };
+
+
     return (
         <Container fluid className='body'>
             <Row>
@@ -12,14 +30,14 @@ export default function NavbarComponent() {
                         className="navbar navbar-expand-md navbar-white bg-navbar fixed-left justify-content-between"
                         id="sidebar"
                     >
-                        <div className="nav-container">
-                            <NavbarBrand to="/">
+                        <div className='mt-2'>
+                            <Link to="/">
                                 <img
                                     src={image}
                                     alt="Spotify_Logo"
-                                    style={{ width: "6rem", height: "40" }}
+                                    style={{ width: "6rem", height: "40", marginLeft: '1rem' }}
                                 />
-                            </NavbarBrand>
+                            </Link>
                             <button
                                 className="navbar-toggler"
                                 type="button"
@@ -32,32 +50,38 @@ export default function NavbarComponent() {
                                 <span className="navbar-toggler-icon"></span>
                             </button>
                             <NavbarCollapse id="navbarNavAltMarkup">
-                                <div className="navbar-nav">
+                                <div className="navbar-nav mt-3" style={{ margin: '0 -1.2rem' }} >
                                     <ul>
                                         <li>
-                                            <Link className="nav-item nav-link" to="/" style={{ fontSize: '12px' }}
+                                            <Link className="nav-item nav-link" to="/" style={{ fontSize: '11px' }}
                                             ><i className="fas fa-home fa-lg"></i>&nbsp; Home
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link className="nav-item nav-link" href="#" style={{ fontSize: '12px' }}
+                                            <Link className="nav-item nav-link" to="/yourlibrary" style={{ fontSize: '11px' }}
                                             ><i className="fas fa-book-open fa-lg"></i>&nbsp; Your
                                                 Library</Link>
                                         </li>
                                         <li>
                                             <InputGroup className="mt-3">
-                                                <FormControl
-                                                    id="searchField"
+                                                <Form.Control
                                                     placeholder="Search"
                                                     aria-label="Search"
                                                     aria-describedby="basic-addon2"
-                                                    className="form-control mb-2"
+                                                    className="mb-2 input"
+                                                    style={{ width: '7rem', height: '1px', fontSize: '11px' }}
+                                                    value={searchQuery}
+                                                    onChange={(e) => setSearchQuery(e.target.value)}
                                                 />
-                                                <div
-                                                    className="input-group-append"
-                                                    style={{ marginBottom: '4%' }}
-                                                >
-                                                    <Button size='sm' variant="outline-light" style={{ height: '2.2rem' }}>GO</Button>
+                                                <div>
+                                                    <Button
+                                                        className='buttonGo'
+                                                        size='sm'
+                                                        variant="outline-secondary"
+                                                        style={{ height: '2.2rem' }}
+                                                        onClick={handleSearch}>
+                                                        GO
+                                                    </Button>
                                                 </div>
                                             </InputGroup>
                                         </li>
@@ -67,11 +91,12 @@ export default function NavbarComponent() {
                         </div>
 
                         <div className="nav-btn">
-                            <button className="btn-sm signup" type="button" style={{ fontSize: '13px' }}>Sign Up</button>
-                            <button className="btn-sm login" type="button" style={{ fontSize: '13px' }}>Login</button>
+                            <Button className="btn-sm signup-btn" type="button" style={{ fontSize: '13px', textTransform: 'capitalize' }}>Sign Up</Button>
+                            <Button className="btn-sm login-btn" type="button" style={{ fontSize: '13px', textTransform: 'capitalize' }}>Login</Button>
                             <a href="#" className='a' style={{ fontSize: '13px' }}>Cookie Policy</a> |
                             <a href="#" className='a' style={{ fontSize: '13px' }}> Privacy</a>
                         </div>
+
                     </div>
                 </Col>
 
